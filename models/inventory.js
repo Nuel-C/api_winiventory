@@ -21,6 +21,9 @@ const inventory = new mongoose.Schema({
     },
     amountSold: {
         type: Number
+    },
+    companyName: {
+        type: String
     }
 })
 
