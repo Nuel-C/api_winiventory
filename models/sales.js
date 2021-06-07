@@ -22,6 +22,9 @@ const sale = new mongoose.Schema({
     },
     discount: {
         type: Number
+    },
+    companyname: {
+        type: String
     }
 })
 

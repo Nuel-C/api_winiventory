@@ -25,12 +25,12 @@ const user = new mongoose.Schema({
     //         ref: 'Inventory'
     //     }
     // ],
-    sales: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Sales'
-        }
-    ],
+    // sales: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'Sales'
+    //     }
+    // ],
     // items:{
     //     type: Array
     // }

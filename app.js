@@ -69,8 +69,6 @@ app.post('/signup', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    // req.session.companyName = req.body.companyname
-    // console.log(req.session.companyname + ' yes')
     User.findOne({ companyname: req.body.companyname }, (err, user) => {
         if (err) {
             var c = {
@@ -115,7 +113,7 @@ app.post('/addinventory', (req, res) => {
         itemName: req.body.itemName,
         units: req.body.units,
         description: req.body.description,
-        unitPrice: req.body.unitprice,
+        unitPrice: req.body.unitPrice,
         companyName: req.body.companyname
     }
     User.findById(req.body.id, function (err, user) {
@@ -152,41 +150,6 @@ app.post('/addinventory', (req, res) => {
                 })
             }
         })
-        // Inventory.find({ itemName: req.body.item }, (err, item) => {
-        //     if (item.length !== 0) {
-        //         var c = {
-        //             success: false,
-        //             message: "Item Already exists",
-        //             item: item
-        //         }
-        //         res.send(c)
-        //     } else {
-        //         Inventory.create(post, (err, inventory) => {
-        //             if (err) {
-        //                 res.json({
-        //                     message: err
-        //                 })
-        //             } else {
-        //                 var c = {
-        //                     success: true,
-        //                     message: "Item Successfully Created",
-        //                     item: inventory
-        //                 }
-        //                 res.send(c)
-        //             }
-        //             // user.inventory.push(inventory)
-        //             // user.items.push(inventory)
-        //             // user.save((err, save) => {
-        //             //     var c = {
-        //             //         success: true,
-        //             //         message: "Item Successfully Created",
-        //             //         item: save
-        //             //     }
-        //             //     res.send(c)
-        //             // })
-        //         })
-        //     }
-        // })
     })
 })
 
@@ -212,21 +175,10 @@ app.post('/edit_inventory/:id', (req, res) => {
             })
         }
     })
-    // console.log(req.body.units)
-
-    // Inventory.findOneAndUpdate({ companyName: req.body.companyname, itemName: req.params.id }, req.body, (err, inventory) => {
-    //     if (err) {
-    //         res.send(err)
-    //     } else {
-    //         res.status(200).json({
-    //             message: 'Success!',
-    //             data: inventory
-    //         })
-    //     }
-    // })
 })
 
 app.post('/edit_inventory/:id/edit', (req, res) => {
+    console.log(req.body)
     Inventory.findOneAndUpdate({ companyName: req.body.companyname, itemName: req.params.id }, req.body, (err, inventory) => {
         if (err) {
             res.send(err)
@@ -241,38 +193,6 @@ app.post('/edit_inventory/:id/edit', (req, res) => {
 
 app.delete('/delete_inventory/:id', (req, res) => {
     console.log(req.params.id)
-    // console.log(req.body.companyname)
-    // User.findOne({ companyname: req.body.companyname }, (err, user) => {
-    //     if (err) {
-    //         res.json({
-    //             message: 'Oops, an error occured!'
-    //         })
-    //     } else {
-    //         Inventory.findOne({ companyName: req.body.companyname }, (err, inventory) => {
-    //             if (err) {
-    //                 res.json({
-    //                     message: 'Oops, an error occured!'
-    //                 })
-    //             } else {
-    //                 for (let i = 0; i < user.inventory.length; i++) {
-    //                     if (user.inventory.includes(inventory._id)) {
-    //                         user.inventory.splice(i, 1)
-    //                     }
-    //                 }
-    //                 console.log(user.inventory)
-    //             }
-    //         })
-    //         // for (let i = 0; i < user.inventory.length; i++) {
-    //         //     if (user._id == user.inventory[i]) {
-    //         //         user.inventory[i].pop()
-    //         //     }
-    //         // }
-    //         // user.save()
-    //         // user.save((err, saved) => {
-    //         //     res.send(saved)
-    //         // })
-    //     }
-    // })
     
     Inventory.findOneAndRemove({ companyName: req.body.companyname, itemName: req.params.id }, (err) => {
         if (err) {
@@ -288,15 +208,6 @@ app.delete('/delete_inventory/:id', (req, res) => {
 })
 
 app.post('/getitems', (req, res) => {
-    // User.findOne({ companyname: req.body.companyname }, (err, user) => {
-    //     var c = {
-    //         success: true,
-    //         message: "Data Found",
-    //         items: user.items
-    //     }
-    //     res.send(c)
-    // })
-
     Inventory.find({ companyName: req.body.companyname }, (err, inventory) => {
         if (err) {
             res.json({
@@ -312,7 +223,25 @@ app.post('/getitems', (req, res) => {
     })
 })
 
-app.post('/add_sale', (req, res) => {
+app.get('/list_inventories', (req, res) => {
+    Inventory.find({}, (err, inventory) => {
+        if (err) {
+            res.json({
+                message: err
+            })
+        } else {
+            res.status(200).json({
+                success: true,
+                message: "Data Found",
+                items: inventory
+            })
+        }
+    })
+})
+
+app.post('/add_sale/:id', (req, res) => {
+    req.body.companyname = req.params.id
+    console.log(req.body.companyname)
     Sales.create(req.body, (err, sale) => {
         if (err) {
             res.json({
@@ -328,8 +257,8 @@ app.post('/add_sale', (req, res) => {
     })
 })
 
-app.get('/list_sales', (req, res) => {
-    Sales.find({}, (err, sales) => {
+app.get('/list_sales/:id', (req, res) => {
+    Sales.find({companyname: req.params.id}, (err, sales) => {
         if (err) {
             res.json({
                 message: 'Oops, an error occured!'
@@ -338,6 +267,22 @@ app.get('/list_sales', (req, res) => {
             res.status(200).json({
                 message: 'Success!',
                 sales
+            })
+        }
+    })
+})
+
+app.get('/list_users', (req, res) => {
+    User.find({type: 'Seller'}, (err, users) => {
+        if (err) {
+            res.json({
+                message: 'Oops, an error occured!',
+                err
+            })
+        } else {
+            res.status(200).json({
+                message: 'Success!',
+                users
             })
         }
     })
