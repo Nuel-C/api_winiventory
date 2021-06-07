@@ -12,6 +12,7 @@ const User = require('./models/user')
 const moment = require('moment')
 const Inventory = require('./models/inventory')
 const Sales = require('./models/sales')
+const Purchase = require('./models/purchase')
 const path = require('path')
 const user = require('./models/user')
 const { ESRCH } = require('constants')
@@ -267,6 +268,38 @@ app.get('/list_sales/:id', (req, res) => {
             res.status(200).json({
                 message: 'Success!',
                 sales
+            })
+        }
+    })
+})
+
+app.post('/add_purchase', (req, res) => {
+    console.log(req.body.companyName)
+    Purchase.create(req.body, (err, purchase) => {
+        if (err) {
+            res.json({
+                message: 'Opps an error occured!',
+                err
+            })
+        } else {
+            res.status(200).json({
+                message: 'Success!',
+                purchase
+            })
+        }
+    })
+})
+
+app.get('/list_purchases/:id', (req, res) => {
+    Purchase.find({customerName: req.params.id}, (err, purchases) => {
+        if (err) {
+            res.json({
+                message: 'Oops, an error occured!'
+            })
+        } else {
+            res.status(200).json({
+                message: 'Success!',
+                purchases
             })
         }
     })
