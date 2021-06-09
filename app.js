@@ -242,7 +242,6 @@ app.get('/list_inventories', (req, res) => {
 
 app.post('/add_sale/:id', (req, res) => {
     req.body.companyname = req.params.id
-    console.log(req.body.companyname)
     Sales.create(req.body, (err, sale) => {
         if (err) {
             res.json({
@@ -290,8 +289,40 @@ app.post('/add_purchase', (req, res) => {
     })
 })
 
+app.post('/edit_purchase/:id', (req, res) => {
+    Purchase.findOneAndUpdate({ customerName: req.params.id, status: 'Not yet approved' }, { $set: { status: 'Approved' } }, (err, purchase) => {
+        if (err) {
+            res.json({
+                message: 'Oops, an error occured!',
+                err
+            })
+        } else {
+            res.status(200).json({
+                message: 'Success!',
+                purchase
+            })
+        }
+    })
+})
+
 app.get('/list_purchases/:id', (req, res) => {
     Purchase.find({customerName: req.params.id}, (err, purchases) => {
+        if (err) {
+            res.json({
+                message: 'Oops, an error occured!'
+            })
+        } else {
+            res.status(200).json({
+                message: 'Success!',
+                purchases
+            })
+        }
+    })
+})
+
+//Get all the purchases for a specific company
+app.post('/list_purchases', (req, res) => {
+    Purchase.find({companyName: req.body.companyname}, (err, purchases) => {
         if (err) {
             res.json({
                 message: 'Oops, an error occured!'

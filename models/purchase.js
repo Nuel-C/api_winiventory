@@ -23,6 +23,9 @@ const purchase = new mongoose.Schema({
     customerName: {
         type: String
     },
+    status: {
+        type: String
+    }
 })
 
 module.exports = mongoose.model('Purchase', purchase)
