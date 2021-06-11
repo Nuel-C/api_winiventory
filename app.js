@@ -357,6 +357,9 @@ app.get('/logout', (req, res) => {
     res.send(true)
 })
 
+app.get('*', (req, res) => {
+    res.redirect('/')
+})
 
 //Start server
 app.listen(process.env.PORT || 5000, () => {
