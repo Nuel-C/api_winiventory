@@ -19,6 +19,12 @@ const sale = new mongoose.Schema({
     },
     phone: {
         type: String
+    },
+    discount: {
+        type: Number
+    },
+    companyname: {
+        type: String
     }
 })
 

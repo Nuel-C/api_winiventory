@@ -19,21 +19,21 @@ const user = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    inventory: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Inventory'
-        }
-    ],
-    sales: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Sales'
-        }
-    ],
-    items:{
-        type: Array
-    }
+    // inventory: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'Inventory'
+    //     }
+    // ],
+    // sales: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'Sales'
+    //     }
+    // ],
+    // items:{
+    //     type: Array
+    // }
 })
 
 module.exports = mongoose.model('User', user)
